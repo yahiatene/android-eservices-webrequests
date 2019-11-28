@@ -1,6 +1,7 @@
 package android.eservices.webrequests.data.di;
 
 import android.content.Context;
+import android.eservices.webrequests.data.api.model.BookService;
 
 import com.facebook.stetho.okhttp3.StethoInterceptor;
 import com.google.gson.Gson;
@@ -24,10 +25,16 @@ public class FakeDependencyInjection {
     private static Retrofit retrofit;
     private static Gson gson;
     private static Context applicationContext;
+    private static BookService bookService;
 
     //public static BookDisplayRepository getBookDisplayRepository()
 
-    //public static BookDisplayService getBookDisplayService()
+    public static BookService getBookDisplayService(){
+        if (bookService == null) {
+            bookService = getRetrofit().create(BookService.class);
+        }
+        return bookService;
+    }
 
     public static Retrofit getRetrofit() {
         if (retrofit == null) {
