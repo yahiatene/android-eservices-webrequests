@@ -1,6 +1,10 @@
 package android.eservices.webrequests.presentation.bookdisplay.search.fragment;
 
 import android.eservices.webrequests.R;
+import android.eservices.webrequests.data.api.model.BookSearchResponse;
+import android.eservices.webrequests.data.di.FakeDependencyInjection;
+import android.eservices.webrequests.presentation.bookdisplay.search.BookSearchContract;
+import android.eservices.webrequests.presentation.bookdisplay.search.BookSearchPresenter;
 import android.eservices.webrequests.presentation.bookdisplay.search.adapter.BookActionInterface;
 import android.eservices.webrequests.presentation.bookdisplay.search.adapter.BookAdapter;
 import android.eservices.webrequests.presentation.bookdisplay.search.adapter.BookItemViewModel;
@@ -25,7 +29,7 @@ import java.util.TimerTask;
 /*
  * TODO : uncheck favorite selection in search results when favorite unchecked from Favorite fragment
  */
-public class SearchFragment extends Fragment implements BookActionInterface {
+public class SearchFragment extends Fragment implements BookActionInterface, BookSearchContract.View {
 
     public static final String TAB_NAME = "Search";
     private View rootView;
@@ -33,6 +37,7 @@ public class SearchFragment extends Fragment implements BookActionInterface {
     private RecyclerView recyclerView;
     private BookAdapter bookAdapter;
     private ProgressBar progressBar;
+    private BookSearchPresenter bookSearchPresenter;
 
     private SearchFragment() {
     }
@@ -46,6 +51,7 @@ public class SearchFragment extends Fragment implements BookActionInterface {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         super.onCreateView(inflater, container, savedInstanceState);
         rootView = inflater.inflate(R.layout.fragment_search, container, false);
+
         return rootView;
     }
 
@@ -54,6 +60,8 @@ public class SearchFragment extends Fragment implements BookActionInterface {
         super.onActivityCreated(savedInstanceState);
         setupSearchView();
         setupRecyclerView();
+        this.bookSearchPresenter = new BookSearchPresenter(FakeDependencyInjection.getBookRepository());
+        bookSearchPresenter.attachView(this);
         progressBar = rootView.findViewById(R.id.progress_bar);
 
     }
@@ -71,7 +79,7 @@ public class SearchFragment extends Fragment implements BookActionInterface {
             @Override
             public boolean onQueryTextChange(final String s) {
                 if (s.length() == 0) {
-                    //bookSearchPresenter.cancelSubscription();
+                    bookSearchPresenter.cancelSubscription();
                     progressBar.setVisibility(View.GONE);
                 } else {
                     progressBar.setVisibility(View.VISIBLE);
@@ -87,7 +95,7 @@ public class SearchFragment extends Fragment implements BookActionInterface {
                     timer.schedule(new TimerTask() {
                         @Override
                         public void run() {
-                            //bookSearchPresenter.searchBooks(s);
+                            bookSearchPresenter.searchBooks(s);
                         }
                     }, sleep);
                 }
@@ -103,7 +111,7 @@ public class SearchFragment extends Fragment implements BookActionInterface {
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
     }
 
-    //@Override
+    @Override
     public void displayBooks(List<BookItemViewModel> bookItemViewModelList) {
         progressBar.setVisibility(View.GONE);
         bookAdapter.bindViewModels(bookItemViewModelList);
@@ -112,9 +120,9 @@ public class SearchFragment extends Fragment implements BookActionInterface {
     @Override
     public void onFavoriteToggle(String bookId, boolean isFavorite) {
         if (isFavorite) {
-            //bookSearchPresenter.addBookToFavorite(bookId);
+            bookSearchPresenter.addBookToFavorite(bookId);
         } else {
-            //bookSearchPresenter.removeBookFromFavorites(bookId);
+            bookSearchPresenter.removeBookFromFavorites(bookId);
         }
     }
 
@@ -131,6 +139,6 @@ public class SearchFragment extends Fragment implements BookActionInterface {
     //@Override
     public void onDestroy() {
         super.onDestroy();
-        //bookSearchPresenter.detachView();
+        bookSearchPresenter.detachView();
     }
 }

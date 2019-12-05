@@ -2,6 +2,9 @@ package android.eservices.webrequests.data.di;
 
 import android.content.Context;
 import android.eservices.webrequests.data.api.model.BookService;
+import android.eservices.webrequests.data.repository.search.BookSearchDataRepository;
+import android.eservices.webrequests.data.repository.search.BookSearchRemoteDataSource;
+import android.eservices.webrequests.presentation.bookdisplay.BookDisplayActivity;
 
 import com.facebook.stetho.okhttp3.StethoInterceptor;
 import com.google.gson.Gson;
@@ -26,10 +29,24 @@ public class FakeDependencyInjection {
     private static Gson gson;
     private static Context applicationContext;
     private static BookService bookService;
+    private static BookSearchRemoteDataSource bookSearchRemoteDataSource;
+    private static BookSearchDataRepository bookSearchDataRepository;
 
-    //public static BookDisplayRepository getBookDisplayRepository()
+    public static BookSearchDataRepository getBookRepository(){
+        if (bookSearchDataRepository == null) {
+            bookSearchDataRepository = new BookSearchDataRepository(getBookDataSource());
+        }
+        return bookSearchDataRepository;
+    }
 
-    public static BookService getBookDisplayService(){
+    public static BookSearchRemoteDataSource getBookDataSource(){
+        if (bookSearchRemoteDataSource == null) {
+            bookSearchRemoteDataSource = new BookSearchRemoteDataSource(getBookService());
+        }
+        return bookSearchRemoteDataSource;
+    }
+
+    public static BookService getBookService(){
         if (bookService == null) {
             bookService = getRetrofit().create(BookService.class);
         }
