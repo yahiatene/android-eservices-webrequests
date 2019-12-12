@@ -2,9 +2,11 @@ package android.eservices.webrequests.data.di;
 
 import android.content.Context;
 import android.eservices.webrequests.data.api.model.BookService;
+import android.eservices.webrequests.data.db.BookDataBase;
 import android.eservices.webrequests.data.repository.search.BookSearchDataRepository;
 import android.eservices.webrequests.data.repository.search.BookSearchRemoteDataSource;
-import android.eservices.webrequests.presentation.bookdisplay.BookDisplayActivity;
+
+import androidx.room.Room;
 
 import com.facebook.stetho.okhttp3.StethoInterceptor;
 import com.google.gson.Gson;
@@ -31,6 +33,7 @@ public class FakeDependencyInjection {
     private static BookService bookService;
     private static BookSearchRemoteDataSource bookSearchRemoteDataSource;
     private static BookSearchDataRepository bookSearchDataRepository;
+    private static BookDataBase bookDataBase;
 
     public static BookSearchDataRepository getBookRepository(){
         if (bookSearchDataRepository == null) {
@@ -83,6 +86,14 @@ public class FakeDependencyInjection {
         applicationContext = context;
     }
 
-    //public static BookDatabase getBookDatabase()
+    public static BookDataBase getBookDatabase(){
+
+        if (bookDataBase == null) {
+            bookDataBase = Room.databaseBuilder(applicationContext.getApplicationContext(),
+                    BookDataBase.class, "database-name").build();
+        }
+
+        return bookDataBase;
+    }
 
 }

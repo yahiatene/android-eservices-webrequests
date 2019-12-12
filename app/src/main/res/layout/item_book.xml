@@ -36,7 +36,7 @@
             app:layout_constraintRight_toLeftOf="@id/favorite_switch"
             app:layout_constraintTop_toTopOf="@id/book_icon_imageview"
             app:layout_constraintVertical_chainStyle="packed"
-            tools:text="My book title" />
+            tools:text="My bookEntity title" />
 
         <TextView
             android:id="@+id/book_authors_textview"

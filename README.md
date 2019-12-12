@@ -5,7 +5,7 @@ Il est plus important que les précédents et mélange plusieurs notions.
 Il fait suite au cours sur RxJava, Retrofit et Gson.
 
 ### Description
-Cette application permet de rechercher un livre via l'API books de Google et de le marquer comme favori.
+Cette application permet de rechercher un livre via l'API bookEntities de Google et de le marquer comme favori.
 Ces favoris sont stockés localement sur l'ordinateur dans une base de données Room. 
 A tout moment il est possible de retirer un livre de ses favoris.
 
@@ -15,7 +15,7 @@ L'application respecte le principe de Clean Architecture [recommandée par Andro
 L'application utilise l'architecture MVP en deux couches (présentation et donnée), présentée [ici](https://android.jlelse.eu/architectural-guidelines-to-follow-for-mvp-pattern-in-android-2374848a0157)
 
 Les appels réseau sont effectués via Retrofit sur l'API Books.
-Toutes les infos sur l'API peuvent être trouvées [ici](https://developers.google.com/books/docs/v1/using). 
+Toutes les infos sur l'API peuvent être trouvées [ici](https://developers.google.com/bookEntities/docs/v1/using).
 **Attention, il faudra vous créer une clé qui vous autorise à utiliser l'API, pour cela, lisez [ça](https://cloud.google.com/docs/authentication/api-keys?visit_id=637031972070460939-2253245193&rd=1).** 
 
 
